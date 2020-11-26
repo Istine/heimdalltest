@@ -1,6 +1,6 @@
 // function for validating input
 const validateInput = (data = {}, rules = []) => {
-    if(!data || rules.length === 0) {
+    if (Object.keys(data).length === 0 || rules.length === 0) {
         return 'missing input fields' // rules pr the data is missing
     }
 
@@ -9,7 +9,7 @@ const validateInput = (data = {}, rules = []) => {
 
     //loop through all rules and compare with requets body.
     rules.forEach((rule, index) => {
-        if(data[rule] == undefined) {
+        if (data[rule] === undefined) {
             missingElements.push(rule)
         }
         else {
@@ -18,30 +18,39 @@ const validateInput = (data = {}, rules = []) => {
     })
 
     // check if there are missing rules
-    if(missingElements.length > 0) {
+    if (missingElements.length > 0) {
         return missingElements
     }
 
     return 'valid'
 }
 
+// const data = {
+//     type:'durban',
+//     crux:"Indices",
+//     color:"green",
+//     title:"Indict the idiot"
+// }, rules = ['type', 'crux', 'color', 'title']
+
+// console.log(validateInput(data, rules))
+
 
 //function to remove an item form object
 const removeFromObject = (data = {}, item = '') => {
-    
+
     //validate input fields
-    if(!data || item == '') {
+    if (!data || item == '') {
         return 'Missing input fields'
     }
 
     //check if item exists in object
-    if(data[item] === undefined) {
+    if (data[item] === undefined) {
         return 'attribute not found.'
     }
 
     //loop through object keys and check for the one that are not equal to the target string
     const new_data = Object.keys(data).reduce((object, next) => {
-        if(item !== next) {
+        if (item !== next) {
             object[next] = data[next]
         }
         return object
@@ -49,3 +58,34 @@ const removeFromObject = (data = {}, item = '') => {
 
     return new_data
 }
+
+
+// function to find the lowest possible point to start anf complete a journey
+// magicalBars - magic available for the journey
+// locations - all distance needed to be travelled
+
+
+const magicLocations = (magicBars = [], locations = [], n) => {
+    let len = n - 1
+    let result, temp, secondTemp, index = 0, jIndex = 0
+    while (index < len) {
+        for (let i = index, j = jIndex; i <= len || j <= len; i++, j++) {
+            result = i == index ? magicBars[i] : result
+            temp = result
+            secondTemp = j + 1 <= len ? magicBars[j + 1] : 0
+            result = temp - locations[i] + secondTemp
+        }
+        if (result > -1) {
+            return index
+        }
+
+        if(index == len - 1) {
+            return -1
+        }
+        index++
+        jIndex++
+    }
+}
+
+// const magicalBars = [3, 2, 5, 4], locations = [2, 3, 4, 2], n = 4
+// console.log(magicLocations(magicalBars, locations, n))
