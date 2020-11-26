@@ -25,16 +25,6 @@ const validateInput = (data = {}, rules = []) => {
     return 'valid'
 }
 
-// const data = {
-//     type:'durban',
-//     crux:"Indices",
-//     color:"green",
-//     title:"Indict the idiot"
-// }, rules = ['type', 'crux', 'color', 'title']
-
-// console.log(validateInput(data, rules))
-
-
 //function to remove an item form object
 const removeFromObject = (data = {}, item = '') => {
 
@@ -63,7 +53,7 @@ const removeFromObject = (data = {}, item = '') => {
 // function to find the lowest possible point to start anf complete a journey
 // magicalBars - magic available for the journey
 // locations - all distance needed to be travelled
-
+// n number of magical sources
 
 const magicLocations = (magicBars = [], locations = [], n) => {
     let len = n - 1
@@ -87,5 +77,9 @@ const magicLocations = (magicBars = [], locations = [], n) => {
     }
 }
 
-// const magicalBars = [3, 2, 5, 4], locations = [2, 3, 4, 2], n = 4
-// console.log(magicLocations(magicalBars, locations, n))
+
+module.exports = {
+    validateInput,
+    magicLocations,
+    removeFromObject,
+}
