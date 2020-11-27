@@ -34,12 +34,15 @@ app.use(express.json()) // parse requests with json data
  *   properties:
  *    data:
  *     type: object
- *     description: The list of attributes to be traversed
- *     example: {"type" : "durban","crux" : "Indices", "color":"green", "title":"Indict the idiot"}
- *    target:
- *     type: string
- *     description: The target variable to be removed
- *     example: type
+ *     properties:
+ *      data:
+ *       type: object
+ *       description: The list of attributes to be traversed
+ *       example: {"type" : "durban","crux" : "Indices", "color":"green", "title":"Indict the idiot"}
+ *      target:
+ *       type: string
+ *       description: The target variable to be removed
+ *       example: type
  *  ResData:
  *   type: object
  *   properties:
@@ -57,14 +60,17 @@ app.use(express.json()) // parse requests with json data
  *  FormData:
  *   type: object
  *   properties:
- *    formData:
+ *    data:
  *     type: object
- *     description: The list of input fields
- *     example: {"type" : "durban","crux" : "Indices", "color":"green", "title":"Indict the idiot"}
- *    rules:
- *     type: array
- *     description: The rules for validating the input
- *     example: ["type", "crux", "color", "title"]
+ *     properties:
+ *      formData:
+ *       type: object
+ *       description: The list of input fields
+ *       example: {"type" : "durban","crux" : "Indices", "color":"green", "title":"Indict the idiot"}
+ *      rules:
+ *       type: array
+ *       description: The rules for validating the input
+ *       example: ["type", "crux", "color", "title"]
  *  ResFormData:
  *   type: object
  *   properties:
@@ -82,18 +88,21 @@ app.use(express.json()) // parse requests with json data
  *  Magic:
  *   type: object
  *   properties:
- *    magical_sources:
- *     type: array
- *     description: Magical sources for carpet to fly
- *     example: [3,2,5,4]
- *    dist:
- *     type: array
- *     description: distance to cover with flying carpet
- *     example: [2,3,4,2]
- *    n:
- *     type: integer
- *     description: number of magical sources (n - 1)
- *     example: 4
+ *    magic:
+ *     type: object
+ *     properties:
+ *      magical_sources:
+ *       type: array
+ *       description: Magical sources for carpet to fly
+ *       example: [3,2,5,4]
+ *      locations:
+ *       type: array
+ *       description: distance to cover with flying carpet
+ *       example: [2,3,4,2]
+ *      number_of_magic_sources:
+ *       type: integer
+ *       description: number of magical sources (n - 1)
+ *       example: 4
  *  ResMagic:
  *   type: object
  *   properties:
@@ -154,10 +163,19 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`)) // listening on
  */
 
 app.post('/validate', (req, res) => {
+    if(Object.keys(req.body).length === 0) {
+        return res.status(400).json({
+            message:"Please fill in required fields"
+        })
+    }
     const response = validateInput(req.body.data.formData, req.body.data.rules)
+    if(response !== 'valid') {
+        return res.status(400).json({
+            missing_fields:response
+        })    
+    }
     return res.status(200).json({
-        success: true,
-        data: response || ['empty response']
+        message: response || ['empty response']
     })
 })
 
@@ -198,9 +216,22 @@ app.post('/validate', (req, res) => {
  *            $ref: '#/definitions/ResData'
  */
 app.post('/remove-from-object', (req, res) => {
+
+    if(Object.keys(req.body).length === 0) {
+        return res.status(400).json({
+            message:"Please fill in required fields"
+        })
+    }
+
     const response = removeFromObject(req.body.data.data, req.body.data.target)
+
+    if(response === 'attribute not found') {
+        return res.status(400).json({
+            message:response
+        })    
+    }
+    
     return res.status(200).json({
-        success: true,
         data: response || ['empty response']
     })
 })
@@ -242,10 +273,17 @@ app.post('/remove-from-object', (req, res) => {
  *               $ref: '#/definitions/ResMagicTwo'  
  */
 app.post('/magic-locations', (req, res) => {
+
+    if(Object.keys(req.body).length === 0) {
+        return res.status(400).json({
+            message:"Please fill in required fields"
+        })
+    }
+
     const { magic_sources, locations, number_of_magic_sources } = req.body.magic
     const response = magicLocations(magic_sources, locations, number_of_magic_sources)
+
     return res.status(200).json({
-        success: true,
-        data: response || ['empty response']
+        response: response || ['empty response']
     })
 })
