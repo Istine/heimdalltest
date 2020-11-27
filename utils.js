@@ -35,7 +35,7 @@ const removeFromObject = (data = {}, item = '') => {
 
     //check if item exists in object
     if (data[item] === undefined) {
-        return 'attribute not found.'
+        return 'attribute not found'
     }
 
     //loop through object keys and check for the one that are not equal to the target string
