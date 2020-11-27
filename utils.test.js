@@ -1,63 +1,63 @@
-// const { validateInput, removeFromObject, magicLocations } = require("./utils");
+const { validateInput, removeFromObject, magicLocations } = require("./utils");
 
-// /** VALIDATING INPUT */
-// ////////////////////////////////////////////////////////////////////////
-// const data = {
-//     type: "durban",
-//     crux: "Indices",
-//     color: "green",
-//     title: "Indict the idiot",
-//   },
-//   rules = ["type", "crux", "color", "title"];
+/** VALIDATING INPUT */
+////////////////////////////////////////////////////////////////////////
+const data = {
+    type: "durban",
+    crux: "Indices",
+    color: "green",
+    title: "Indict the idiot",
+  },
+  rules = ["type", "crux", "color", "title"];
 
-// //valid test case
-// test(" Validate Input given a set a rules ", () => {
-//   expect(validateInput(data, rules)).toBe("valid");
-// });
+//valid test case
+test(" Validate Input given a set a rules ", () => {
+  expect(validateInput(data, rules)).toBe("valid");
+});
 
-// const invalidData = {
-//   // type: "durban",
-//   // crux: "Indices",
-//   // color:"green",
-//   title: "Indict the idiot",
-// };
+const invalidData = {
+  // type: "durban",
+  // crux: "Indices",
+  // color:"green",
+  title: "Indict the idiot",
+};
 
-// //invalid test case
-// test(" Invalidate Input given a set a rules ", () => {
-//   expect(validateInput(invalidData, rules)).toEqual(["type", "crux", "color"]);
-// });
+//invalid test case
+test(" Invalidate Input given a set a rules ", () => {
+  expect(validateInput(invalidData, rules)).toEqual(["type", "crux", "color"]);
+});
 
-// ////////////////////////////////////////////////////////////////////////
-// /**  REMOVING AN ATTRIBUTE FROM AN ARRAY */
+////////////////////////////////////////////////////////////////////////
+/**  REMOVING AN ATTRIBUTE FROM AN ARRAY */
 
-// const testObj = {
-//     type: "durban",
-//     crux: "Indices",
-//     color: "green",
-//     title: "Indict the idiot",
-//   },
-//   target = "type";
+const testObj = {
+    type: "durban",
+    crux: "Indices",
+    color: "green",
+    title: "Indict the idiot",
+  },
+  target = "type";
 
-// test("Should remove the target attribute from an object ", () => {
-//   expect(removeFromObject(testObj, target)).toEqual({
-//     crux: "Indices",
-//     color: "green",
-//     title: "Indict the idiot",
-//   });
-// });
+test("Should remove the target attribute from an object ", () => {
+  expect(removeFromObject(testObj, target)).toEqual({
+    crux: "Indices",
+    color: "green",
+    title: "Indict the idiot",
+  });
+});
 
-// const falseTarget = 'blue'
+const falseTarget = 'blue'
 
-// test("Should return attribute not found", () => {
-//     expect(removeFromObject(testObj, falseTarget)).toBe('attribute not found');
-//   });
+test("Should return attribute not found", () => {
+    expect(removeFromObject(testObj, falseTarget)).toBe('attribute not found');
+  });
 
-// ///////////////////////////////////////////////////////////////////////////
-//         //MAGIC LOCATIONS
-// const magic = [3 , 2, 5, 4] 
-// const dist = [2 ,3 , 4, 2]
-// let n  = 4
+///////////////////////////////////////////////////////////////////////////
+        //MAGIC LOCATIONS
+const magic = [3 , 2, 5, 4] 
+const dist = [2 ,3 , 4, 2]
+let n  = 4
 
-// test('should ', () => {
-//     expect(magicLocations(magic, dist, n)).toBe(0)
-// })
+test('should ', () => {
+    expect(magicLocations(magic, dist, n)).toBe(0)
+})
