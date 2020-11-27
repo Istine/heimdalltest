@@ -40,6 +40,20 @@ app.use(express.json()) // parse requests with json data
  *     type: string
  *     description: The target variable to be removed
  *     example: type
+ *  ResData:
+ *   type: object
+ *   properties:
+ *    data:
+ *     type: object
+ *     description: The new list after removing the attribute or 'attribute not found'
+ *     example: {"crux" : "Indices", "color":"green", "title":"Indict the idiot"}
+ *  ResDataTwo:
+ *   type: object
+ *   properties:
+ *    message:
+ *     type: string
+ *     description: this is the return message when the attribute was not found
+ *     example: attribute not found 
  *  FormData:
  *   type: object
  *   properties:
@@ -51,6 +65,17 @@ app.use(express.json()) // parse requests with json data
  *     type: array
  *     description: The rules for validating the input
  *     example: ["type", "crux", "color", "title"]
+ *  ResFormData:
+ *   type: object
+ *   properties:
+ *    missing_fields:
+ *     type: array
+ *     description: The rules for validating the input
+ *     example: ["type", "crux", "color", "title"]
+ *    message:
+ *     type: string
+ *     description: The input has been validated successfully
+ *     example: valid
  *  Magic:
  *   type: object
  *   properties:
@@ -65,7 +90,14 @@ app.use(express.json()) // parse requests with json data
  *    n:
  *     type: integer
  *     description: number of magical sources (n - 1)
- *     example: 4  
+ *     example: 4
+ *  ResMagic:
+ *   type: object
+ *   properties:
+ *    response:
+ *     type: integer
+ *     description: returns the index of lowest starting point or -1 if no solution exists
+ *     example: 0  -1     
  */
 
 app.use(express.urlencoded({ extended: false })) // parses urlencoded data with queryString lib
@@ -99,6 +131,10 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`)) // listening on
  *     responses:
  *       data:
  *         description: missing fields or 'valid' for success
+ *         content:
+ *          application/json:
+ *           schema:
+ *            $ref: '#/definitions/ResFormData' 
  */
 
 app.post('/validate', (req, res) => {
@@ -132,8 +168,18 @@ app.post('/validate', (req, res) => {
  *         required: true
  *         type: object
  *     responses:
- *       data:
- *         description: The new object or 'attribute not found'
+ *       '400':
+ *         description: attribute not found
+ *         content:
+ *          application/json:
+ *           schema:
+ *            $ref: '#/definitions/ResDataTwo'
+ *       '200':
+ *         description: The new object
+ *         content:
+ *          application/json:
+ *           schema:
+ *            $ref: '#/definitions/ResData'
  */
 app.post('/remove-from-object', (req, res) => {
     const response = removeFromObject(req.body.data.data, req.body.data.target)
@@ -168,6 +214,10 @@ app.post('/remove-from-object', (req, res) => {
  *     responses:
  *       data:
  *         description: returns the index of the lowest point or -1 if the solution is not feasible
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/ResMagic' 
  */
 app.post('/magic-locations', (req, res) => {
     const { magic_sources, locations, number_of_magic_sources } = req.body.magic
