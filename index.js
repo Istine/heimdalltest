@@ -70,11 +70,14 @@ app.use(express.json()) // parse requests with json data
  *   properties:
  *    missing_fields:
  *     type: array
- *     description: The rules for validating the input
+ *     description: Bad request response for missing fields
  *     example: ["type", "crux", "color", "title"]
+ *  ResFormDataTwo:
+ *   type: object
+ *   properties:
  *    message:
  *     type: string
- *     description: The input has been validated successfully
+ *     description: The rules for satisfied
  *     example: valid
  *  Magic:
  *   type: object
@@ -96,8 +99,15 @@ app.use(express.json()) // parse requests with json data
  *   properties:
  *    response:
  *     type: integer
- *     description: returns the index of lowest starting point or -1 if no solution exists
- *     example: 0  -1     
+ *     description: The index of the starting point that satisfies the solution
+ *     example: 0
+ *  ResMagicTwo:
+ *   type: object
+ *   properties:
+ *    response:
+ *     type: integer
+ *     description: The solution does not exist
+ *     example: -1     
  */
 
 app.use(express.urlencoded({ extended: false })) // parses urlencoded data with queryString lib
@@ -129,12 +139,18 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`)) // listening on
  *         required: true
  *         type: object
  *     responses:
- *       data:
- *         description: missing fields or 'valid' for success
+ *       '400':
+ *         description: missing fields
  *         content:
  *          application/json:
  *           schema:
- *            $ref: '#/definitions/ResFormData' 
+ *            $ref: '#/definitions/ResFormData'
+ *       '200':
+ *         description: The action was sucessfully
+ *         content:
+ *          application/json:
+ *           schema:
+ *            $ref: '#/definitions/ResFormDataTwo' 
  */
 
 app.post('/validate', (req, res) => {
@@ -212,12 +228,18 @@ app.post('/remove-from-object', (req, res) => {
  *         required: true
  *         type: object
  *     responses:
- *       data:
- *         description: returns the index of the lowest point or -1 if the solution is not feasible
+ *       '200':
+ *         description: returns the lowest index of the magical starting points that satisfies the solution
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/definitions/ResMagic' 
+ *               $ref: '#/definitions/ResMagic'
+ *       '400':
+ *         description: The solution does not exist and it returns -1
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/ResMagicTwo'  
  */
 app.post('/magic-locations', (req, res) => {
     const { magic_sources, locations, number_of_magic_sources } = req.body.magic
